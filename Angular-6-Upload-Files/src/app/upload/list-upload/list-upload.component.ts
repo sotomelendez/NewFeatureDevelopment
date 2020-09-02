@@ -12,6 +12,7 @@ export class ListUploadComponent implements OnInit {
   showFile = false;
   files: string[] = [];
   page: number = 1;
+  type: string = '';
   showLoadMore = true;
 
   constructor(private uploadService: UploadFileService) { }
@@ -21,6 +22,13 @@ export class ListUploadComponent implements OnInit {
   }
 
   loadFiles(enable: boolean) {
+    if(this.type === undefined || this.type === '')
+      this.loadFilesPage(enable);
+    else
+      this.loadFilesPageByType(enable);
+  }
+
+  loadFilesPage(enable: boolean) {
     this.showFile = enable;
 
     this.uploadService.getFilesPage(this.page)
@@ -37,11 +45,29 @@ export class ListUploadComponent implements OnInit {
       });
   }
 
-  // showFiles(enable: boolean) {
-  //   this.showFile = enable;
+  loadFilesPageByType(enable: boolean) {
+    this.showFile = enable;
 
-  //   if (enable) {
-  //     this.fileUploads = this.uploadService.getFiles();
-  //   }
-  // }
+    this.uploadService.getFilesPageByType(this.page, this.type)
+      .toPromise().then((response) => {
+        response.forEach(element => {
+          this.files.push(element);
+        });
+        this.page++;
+        if(response.length < 20)
+          this.showLoadMore = false;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  filterByType($event) {
+    this.type = $event.target.value;
+    this.page = 1;
+    this.files = [];
+    this.showLoadMore = true;
+    this.loadFiles(true);
+  }
+
 }

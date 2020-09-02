@@ -29,4 +29,8 @@ export class UploadFileService {
   getFilesPage(page): Observable<any> {
     return this.http.get('http://localhost:8080/api/file/page?page=' + page.toString());
   }
+
+  getFilesPageByType(page, type): Observable<any> {
+    return this.http.get('http://localhost:8080/api/file/pageByType?page=' + page.toString() + '&type=' + type);
+  }
 }

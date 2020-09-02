@@ -1,24 +1,21 @@
-<!-- <button class="button btn-info" *ngIf='showFile' (click)='showFiles(false)'>Hide Files</button> -->
-
-<!-- <button class="button btn-info" *ngIf='!showFile' (click)='showFiles(true)'>Show Files</button> -->
-
-<!-- <div [hidden]="!showFile">
-  <div class="panel panel-primary">
-    <div class="panel-heading">List of Files</div>
-    <div *ngFor="let file of fileUploads | async">
-      <div class="panel-body">
-        <details-upload [fileUpload]='file'></details-upload>
-      </div>
-    </div>
-  </div>
-</div> -->
+<div style="margin-bottom: 20px;">
+  <span>Filter by type: </span>
+  <select name="fileType" (change)="filterByType($event)">
+    <option value="">All</option>
+    <option value="jpg">JPG</option>
+    <option value="png">PNG</option>
+  </select>
+</div>
 
 <div [hidden]="!showFile">
   <div class="panel panel-primary">
     <div class="panel-heading">List of Files</div>
+    <div class="panel-body" *ngIf="files.length === 0">No files match your criteria</div>
     <div *ngFor="let file of files">
       <div class="panel-body">
-        <details-upload [fileUpload]='file'></details-upload>
+        <table>
+          <details-upload [fileUpload]='file'></details-upload>
+        </table>
       </div>
     </div>
   </div>
